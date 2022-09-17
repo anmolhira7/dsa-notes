@@ -1,0 +1,116 @@
+package Practise.linkedlistPr;
+
+import java.util.Scanner;
+
+public class AddTwoNum {
+    static class Node {
+        int data;
+        Node next;
+
+        Node() {
+            next = null;
+        }
+
+        Node(int data) {
+            this.data = data;
+            next = null;
+        }
+    }
+
+    static Node addTwoNumbers(Node list1, Node list2) {
+
+        Node l1 = reverse(list1);
+        Node l2 = reverse(list2);
+
+        //carry will be atmost 1 for two digit sum
+        int carry = 0;
+
+        Node dummy = new Node();
+        Node temp = dummy;
+
+        //tab tak loop chalao jab tak 3 me se koi bacha ho
+        while (l1 != null || l2 != null || carry == 1) {
+            int sum = 0;
+
+            if (l1 != null) {
+                sum += l1.data;
+                l1 = l1.next;
+            }
+
+            if (l2 != null) {
+                sum += l2.data;
+                l2 = l2.next;
+            }
+
+            sum += carry;
+            //you have added the carry so reset it
+            carry = sum / 10;
+
+            //we need single digit in our node as we have already taken out carry
+            Node new_node = new Node(sum % 10);
+
+            temp.next = new_node;
+            temp = temp.next;
+
+        }
+
+        Node res = reverse(dummy.next);
+        // return dummy.next;
+        return res;
+    }
+
+    static void printList(Node head) {
+        Node temp = head;
+        while (temp != null) {
+            System.out.print(temp.data + " ");
+            temp = temp.next;
+        }
+        System.out.println();
+    }
+
+    static Node reverse(Node head) {
+        Node cur = head;
+        Node prev = null;
+
+        while (cur != null) {
+            Node temp = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = temp;
+        }
+
+        return prev;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+
+        //for node first
+        int val = sc.nextInt();
+        Node first = new Node(val);
+        Node tail = first;
+
+        for (int i = 0; i < n - 1; i++) {
+            val = sc.nextInt();
+            tail.next = new Node(val);
+            tail = tail.next;
+        }
+
+        //for second node
+        val = sc.nextInt();
+
+        Node second = new Node(val);
+        tail = second;
+        for (int i = 0; i < m - 1; i++) {
+            val = sc.nextInt();
+            tail.next = new Node(val);
+            tail = tail.next;
+        }
+
+        Node res = addTwoNumbers(first, second);
+        printList(res);
+    }
+}
